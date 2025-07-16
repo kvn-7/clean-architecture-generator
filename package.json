@@ -2,7 +2,7 @@
   "name": "cleanArch",
   "displayName": "Clean Architecture Generator",
   "description": "",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.102.0"
   },
@@ -15,9 +15,35 @@
     "commands": [
       {
         "command": "cleanArch.createNodeFeature",
-        "title": "cleanArch: Create Feature (NodeJs)"
+        "title": "Create Node.js Clean Architecture Feature"
+      },
+      {
+        "command": "cleanArch.createFlutterFeature",
+        "title": "Create Flutter Clean Architecture Feature"
       }
-    ]
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "cleanArch.createNodeFeature",
+          "when": "explorerResourceIsFolder",
+          "group": "cleanarch@1"
+        },
+        {
+          "command": "cleanArch.createFlutterFeature",
+          "when": "explorerResourceIsFolder",
+          "group": "cleanarch@2"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "cleanArch.createNodeFeature"
+        },
+        {
+          "command": "cleanArch.createFlutterFeature"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
