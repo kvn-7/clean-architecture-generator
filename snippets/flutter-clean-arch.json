@@ -1,0 +1,204 @@
+{
+  "Flutter UseCase": {
+    "prefix": "clean-usecase",
+    "body": [
+      "class ${TM_FILENAME_BASE/(.*)_use_case$/${1:/pascalcase}/}UseCase {",
+      "  final ${1:I}${2:Repository} _repository;",
+      "",
+      "  const ${TM_FILENAME_BASE/(.*)_use_case$/${1:/pascalcase}/}UseCase(this._repository);",
+      "",
+      "  Future<Either<AppException, ${3:ResponseType}>> call() {",
+      "    return _repository.${4:methodName}();",
+      "  }",
+      "}"
+    ],
+    "description": "Generate a clean architecture UseCase class from filename (expects 'feature_use_case.dart')"
+  },
+  "Flutter UseCase Provider": {
+    "prefix": "clean-usecase-provider",
+    "body": [
+      "import 'package:riverpod_annotation/riverpod_annotation.dart';",
+      "",
+      "part '${TM_FILENAME_BASE}.g.dart';",
+      "",
+      "@riverpod",
+      "class ${TM_FILENAME_BASE/(.*)_use_case_provider$/${1:/pascalcase}/}UseCaseProvider extends _$${TM_FILENAME_BASE/(.*)_use_case_provider$/${1:/pascalcase}/}UseCaseProvider {",
+      "  @override",
+      "  ${TM_FILENAME_BASE/(.*)_use_case_provider$/${1:/pascalcase}/}UseCase build() {",
+      "    return ${TM_FILENAME_BASE/(.*)_use_case_provider$/${1:/pascalcase}/}UseCase(ref.watch(${1:repositoryProvider}));",
+      "  }",
+      "}"
+    ],
+    "description": "Generate a Riverpod UseCase provider from filename (expects 'feature_use_case_provider.dart')"
+  },
+  "Flutter Riverpod Provider": {
+    "prefix": "clean-provider",
+    "body": [
+      "import 'package:riverpod_annotation/riverpod_annotation.dart';",
+      "",
+      "part '${TM_FILENAME_BASE}.g.dart';",
+      "",
+      "@riverpod",
+      "class ${TM_FILENAME_BASE/(.*)_provider$/${1:/pascalcase}/}Provider extends _$${TM_FILENAME_BASE/(.*)_provider$/${1:/pascalcase}/}Provider {",
+      "  @override",
+      "  FutureOr<${1:ResponseType}> build() async {",
+      "    final useCase = ref.watch(${2:useCaseProvider});",
+      "    final result = await useCase();",
+      "",
+      "    return result.fold((failure) => throw failure, (res) => res);",
+      "  }",
+      "}"
+    ],
+    "description": "Generate a Riverpod provider from filename (expects 'feature_provider.dart')"
+  },
+  "Flutter Entity": {
+    "prefix": "clean-entity",
+    "body": [
+      "class ${TM_FILENAME_BASE/(.*)_entity$/${1:/pascalcase}/}Entity {",
+      "  final ${1:String} ${2:property};",
+      "",
+      "  const ${TM_FILENAME_BASE/(.*)_entity$/${1:/pascalcase}/}Entity({",
+      "    required this.${2:property},",
+      "  });",
+      "",
+      "  @override",
+      "  bool operator ==(Object other) {",
+      "    if (identical(this, other)) return true;",
+      "",
+      "    return other is ${TM_FILENAME_BASE/(.*)_entity$/${1:/pascalcase}/}Entity && other.${2:property} == ${2:property};",
+      "  }",
+      "",
+      "  @override",
+      "  int get hashCode => ${2:property}.hashCode;",
+      "}"
+    ],
+    "description": "Generate a clean architecture entity from filename (expects 'feature_entity.dart')"
+  },
+  "Flutter Repository Interface": {
+    "prefix": "clean-repository-interface",
+    "body": [
+      "abstract class I${TM_FILENAME_BASE/(.*)_repository$/${1:/pascalcase}/}Repository {",
+      "  Future<Either<AppException, ${1:ResponseType}>> ${2:methodName}();",
+      "}"
+    ],
+    "description": "Generate a repository interface from filename (expects 'feature_repository.dart')"
+  },
+  "Flutter Repository Implementation": {
+    "prefix": "clean-repository-impl",
+    "body": [
+      "class ${TM_FILENAME_BASE/(.*)_repository$/${1:/pascalcase}/}Repository implements I${TM_FILENAME_BASE/(.*)_repository$/${1:/pascalcase}/}Repository {",
+      "  final ${1:I}${2:RemoteDataSource} _remoteDataSource;",
+      "",
+      "  const ${TM_FILENAME_BASE/(.*)_repository$/${1:/pascalcase}/}Repository(this._remoteDataSource);",
+      "",
+      "  @override",
+      "  Future<Either<AppException, ${3:ResponseType}>> ${4:methodName}() async {",
+      "    try {",
+      "      final result = await _remoteDataSource.${5:dataSourceMethod}();",
+      "      return Right(result);",
+      "    } on AppException catch (e) {",
+      "      return Left(e);",
+      "    } catch (e) {",
+      "      return Left(AppException.unknown(e.toString()));",
+      "    }",
+      "  }",
+      "}"
+    ],
+    "description": "Generate a repository implementation from filename (expects 'feature_repository.dart')"
+  },
+  "Flutter Repository Provider": {
+    "prefix": "clean-repository-provider",
+    "body": [
+      "import 'package:riverpod_annotation/riverpod_annotation.dart';",
+      "",
+      "part '${TM_FILENAME_BASE}.g.dart';",
+      "",
+      "@riverpod",
+      "class ${TM_FILENAME_BASE/(.*)_repository_provider$/${1:/pascalcase}/}RepositoryProvider extends _$${TM_FILENAME_BASE/(.*)_repository_provider$/${1:/pascalcase}/}RepositoryProvider {",
+      "  @override",
+      "  I${TM_FILENAME_BASE/(.*)_repository_provider$/${1:/pascalcase}/}Repository build() {",
+      "    return ${TM_FILENAME_BASE/(.*)_repository_provider$/${1:/pascalcase}/}Repository(",
+      "      ref.watch(${1:dataSourceProvider}),",
+      "    );",
+      "  }",
+      "}"
+    ],
+    "description": "Generate a Riverpod repository provider from filename (expects 'feature_repository_provider.dart')"
+  },
+  "Flutter Remote Data Source Interface": {
+    "prefix": "clean-remote-datasource-interface",
+    "body": [
+      "abstract class I${TM_FILENAME_BASE/(.*)_remote_data_source$/${1:/pascalcase}/}RemoteDataSource {",
+      "  Future<${1:ResponseType}> ${2:methodName}();",
+      "}"
+    ],
+    "description": "Generate a remote data source interface from filename (expects 'feature_remote_data_source.dart')"
+  },
+  "Flutter Remote Data Source Implementation": {
+    "prefix": "clean-remote-datasource-impl",
+    "body": [
+      "class ${TM_FILENAME_BASE/(.*)_remote_data_source$/${1:/pascalcase}/}RemoteDataSource implements I${TM_FILENAME_BASE/(.*)_remote_data_source$/${1:/pascalcase}/}RemoteDataSource {",
+      "  final ${1:ApiService} _apiService;",
+      "",
+      "  const ${TM_FILENAME_BASE/(.*)_remote_data_source$/${1:/pascalcase}/}RemoteDataSource(this._apiService);",
+      "",
+      "  @override",
+      "  Future<${2:ResponseType}> ${3:methodName}() async {",
+      "    final response = await _apiService.get('${4:/api/endpoint}');",
+      "    return ${2:ResponseType}.fromJson(response.data);",
+      "  }",
+      "}"
+    ],
+    "description": "Generate a remote data source implementation from filename (expects 'feature_remote_data_source.dart')"
+  },
+  "Flutter Remote Data Source Provider": {
+    "prefix": "clean-remote-datasource-provider",
+    "body": [
+      "import 'package:riverpod_annotation/riverpod_annotation.dart';",
+      "",
+      "part '${TM_FILENAME_BASE}.g.dart';",
+      "",
+      "@riverpod",
+      "class ${TM_FILENAME_BASE/(.*)_remote_data_source_provider$/${1:/pascalcase}/}RemoteDataSourceProvider extends _$${TM_FILENAME_BASE/(.*)_remote_data_source_provider$/${1:/pascalcase}/}RemoteDataSourceProvider {",
+      "  @override",
+      "  I${TM_FILENAME_BASE/(.*)_remote_data_source_provider$/${1:/pascalcase}/}RemoteDataSource build() {",
+      "    return ${TM_FILENAME_BASE/(.*)_remote_data_source_provider$/${1:/pascalcase}/}RemoteDataSource(",
+      "      ref.watch(${1:apiServiceProvider}),",
+      "    );",
+      "  }",
+      "}"
+    ],
+    "description": "Generate a Riverpod remote data source provider from filename (expects 'feature_remote_data_source_provider.dart')"
+  },
+  "Flutter Model": {
+    "prefix": "clean-model",
+    "body": [
+      "class ${TM_FILENAME_BASE/(.*)_model$/${1:/pascalcase}/}Model {",
+      "  final ${1:String} ${2:property};",
+      "",
+      "  const ${TM_FILENAME_BASE/(.*)_model$/${1:/pascalcase}/}Model({",
+      "    required this.${2:property},",
+      "  });",
+      "",
+      "  factory ${TM_FILENAME_BASE/(.*)_model$/${1:/pascalcase}/}Model.fromJson(Map<String, dynamic> json) {",
+      "    return ${TM_FILENAME_BASE/(.*)_model$/${1:/pascalcase}/}Model(",
+      "      ${2:property}: json['${2:property}'] as ${1:String},",
+      "    );",
+      "  }",
+      "",
+      "  Map<String, dynamic> toJson() {",
+      "    return {",
+      "      '${2:property}': ${2:property},",
+      "    };",
+      "  }",
+      "",
+      "  ${3:EntityName} toEntity() {",
+      "    return ${3:EntityName}(",
+      "      ${2:property}: ${2:property},",
+      "    );",
+      "  }",
+      "}"
+    ],
+    "description": "Generate a data model from filename (expects 'feature_model.dart')"
+  }
+}

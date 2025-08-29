@@ -2,7 +2,7 @@
   "name": "cleanArch",
   "displayName": "Clean Architecture Generator",
   "description": "",
-  "version": "0.0.2",
+  "version": "0.0.7",
   "engines": {
     "vscode": "^1.102.0"
   },
@@ -43,7 +43,13 @@
           "command": "cleanArch.createFlutterFeature"
         }
       ]
-    }
+    },
+    "snippets": [
+      {
+        "language": "dart",
+        "path": "./snippets/flutter-clean-arch.json"
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
